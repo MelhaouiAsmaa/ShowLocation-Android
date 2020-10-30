@@ -3,11 +3,15 @@ package com.example.mygetcurrentapplocationapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -51,6 +55,28 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
+
+        findViewById(R.id.buttonGetCurrentLocation).
+                setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        final PostgreSQLJDBC postgreSQLJDBC = new PostgreSQLJDBC();
+                        Task<Location> task = client.getLastLocation();
+                        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(final Location location) {
+                                //when success
+                                if (location != null) {
+                                    Log.i("asmaa", "before the call");
+                                    postgreSQLJDBC.connectionMethod(location.getLatitude(), location.getLongitude());
+                                    Log.i("yousra", "after the call");
+                                }
+                            }
+                        });
+                    }
+                });
     }
 
     private void getCurrentLocation() {
@@ -71,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             //create marker options
                             MarkerOptions options = new MarkerOptions().position(latLng).title("You are here");
+                            //Toast
+                            Toast toast = Toast.makeText(getApplicationContext(),
+                                    String.valueOf(location.getLatitude() +"/"+ location.getLongitude()),
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+
                             //Zoom map
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                             //add marker on map

@@ -14,4 +14,13 @@
         android:layout_height="wrap_content"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
+    <Button style="@style/Widget.AppCompat.Button.Colored"
+        android:id="@+id/buttonGetCurrentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirmer"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="630dp"
+        android:layout_marginLeft="250dp" />
+
 </RelativeLayout>
